@@ -1,7 +1,7 @@
 {
-  "name": "max-file-size-cli",
-  "version": "1.0.0",
-  "description": "",
+  "name": "vue-native-cli",
+  "version": "0.0.1-alpha.9",
+  "description": "Command-Line Interface for Vue Native App",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,8 +9,23 @@
   "bin": {
     "vue-native-cli": "index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GeekyAnts/vue-native-cli.git"
+  },
+  "keywords": ["vue", "native", "cli"],
+  "preferGlobal": true,
+  "engines": {
+    "node": "^4.5 || >=5.10"
+  },
+  "engineStrict": true,
+  "author": "Geekyants (https://geekyants.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GeekyAnts/vue-native-cli/issues"
+  },
+  "files": ["src/**", "index.js"],
+  "homepage": "https://github.com/GeekyAnts/vue-native-cli",
   "dependencies": {
     "chalk": "^2.3.2",
     "columnify": "^1.5.4",
