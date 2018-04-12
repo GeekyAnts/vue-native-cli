@@ -1,6 +1,6 @@
 {
   "name": "vue-native-cli",
-  "version": "0.0.1-alpha.9",
+  "version": "0.0.1-alpha.10",
   "description": "Command-Line Interface for Vue Native App",
   "main": "index.js",
   "scripts": {
