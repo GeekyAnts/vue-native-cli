@@ -5,10 +5,12 @@ const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
 var exec = require("child_process").exec;
+const spawnSync = require("child_process").spawnSync;
 var minimist = require("minimist");
 var program = require("commander");
 var prompt = require("prompt");
 const semver = require("semver");
+const ora = require("ora");
 const promptModule = require("./src/prompt/index");
 const constantObjects = require("./src/utils/constants");
 const validationObjects = require("./src/utils/validation");
@@ -66,9 +68,34 @@ function init(projectName, cmd) {
 }
 
 function createVueNativeProject(projectName, cmd) {
-  const pathResolve = path.resolve(projectName);
-  const pathBase = path.basename(projectName);
-  console.log(chalk.green("Vue Native project created successfully "));
+  var root = path.resolve(projectName);
+  if (fs.existsSync(projectName)) {
+    removeExistingDirectory(projectName);
+  }
+  console.log(chalk.green(`Creating Vue-Native ${projectName} App`));
+  createCrnaProject(projectName, cmd);
+}
+
+function createCrnaProject(projectName, cmd) {
+  const spinner = ora(
+    `Creating Crna ${chalk.green(projectName)} project \n`
+  ).start();
+  const crnaProjectCreationResponse = spawnSync(
+    constantObjects.crnaPackageName,
+    [projectName],
+    { stdio: "inherit" }
+  );
+  spinner.succeed(`Create Crna ${chalk.green(projectName)} project`);
+}
+
+function removeExistingDirectory(directoryName) {
+  const spinner = ora(
+    `Removing ${chalk.green(directoryName)} project \n`
+  ).start();
+  const crnaProjectCreationResponse = spawnSync("rm", ["-fr", directoryName], {
+    stdio: "inherit"
+  });
+  spinner.succeed(`Removed ${chalk.green(directoryName)} project`);
 }
 
 function terminateTheProcess(msg) {

@@ -17,6 +17,7 @@
     "commander": "2.15.1",
     "filesize": "^3.6.1",
     "minimist": "^1.2.0",
+    "ora": "2.0.0",
     "prompt": "1.0.0",
     "semver": "5.5.0"
   }
