@@ -216,6 +216,9 @@ function setupVueNativeApp(projectName, cmd) {
     path.join(projectName, constantObjects.appVueFileName),
     appVueFileContent
   );
+  console.log(
+      chalk.green(`Completed Installing Vue Native ${projectName} App`), 
+    );
 }
 
 function terminateTheProcess(msg) {
