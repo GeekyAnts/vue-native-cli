@@ -4,8 +4,11 @@ const constantObject = {
   vueNativePackages: {
     vueNativeCore: "vue-native-core",
     vueNativeHelper: "vue-native-helper",
-    vueNativeScripts: "vue-native-scripts",
-  }
+    vueNativeScripts: "vue-native-scripts"
+  },
+  rnPkgCliFileName: "rn-cli.config.js",
+  vueTransformerFileName: "vueTransformerPlugin.js",
+  appVueFileName: "App.vue"
 };
 
 module.exports = constantObject;

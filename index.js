@@ -75,6 +75,7 @@ function createVueNativeProject(projectName, cmd) {
   console.log(chalk.green(`Creating Vue-Native ${projectName} App`));
   createCrnaProjectSync(projectName, cmd);
   handleAndAddVueNativePackageDependencySync(projectName, cmd);
+  setupVueNativeApp(projectName, cmd);
 }
 
 function createCrnaProjectSync(projectName, cmd) {
@@ -103,6 +104,7 @@ function handleAndAddVueNativePackageDependencySync(projectName, cmd) {
   process.chdir(projectName);
   installVueNativeDependency();
   installVueNativeDevDependency();
+  process.chdir("..");
 }
 
 function installVueNativeDependency() {
@@ -182,6 +184,38 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
     };
   }
   return vueNativePkgInstallationCommand;
+}
+
+function setupVueNativeApp(projectName, cmd) {
+  // process.chdir(projectName);
+  const rnCliFile = fs.readFileSync(
+    path.resolve(__dirname, "./src/utils/rnCli.config.js")
+  );
+  fs.writeFileSync(
+    path.join(projectName, constantObjects.rnPkgCliFileName),
+    rnCliFile
+  );
+
+  const transformFileContent = fs.readFileSync(
+    path.resolve(__dirname, "./src/utils/vueTransformerPlugin.js")
+  );
+  fs.writeFileSync(
+    path.join(projectName, constantObjects.vueTransformerFileName),
+    transformFileContent
+  );
+
+  process.chdir(projectName);
+  spawnSync("mv", ["App.js", "App.vue"]);
+  spawnSync("rm", ["App.test.js"]);
+  process.chdir("..");
+
+  const appVueFileContent = fs.readFileSync(
+    path.resolve(__dirname, "./src/utils/app.vue")
+  );
+  fs.writeFileSync(
+    path.join(projectName, constantObjects.appVueFileName),
+    appVueFileContent
+  );
 }
 
 function terminateTheProcess(msg) {
