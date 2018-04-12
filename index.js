@@ -73,10 +73,11 @@ function createVueNativeProject(projectName, cmd) {
     removeExistingDirectory(projectName);
   }
   console.log(chalk.green(`Creating Vue-Native ${projectName} App`));
-  createCrnaProject(projectName, cmd);
+  createCrnaProjectSync(projectName, cmd);
+  handleAndAddVueNativePackageDependencySync(projectName, cmd);
 }
 
-function createCrnaProject(projectName, cmd) {
+function createCrnaProjectSync(projectName, cmd) {
   const spinner = ora(
     `Creating Crna ${chalk.green(projectName)} project \n`
   ).start();
@@ -96,6 +97,91 @@ function removeExistingDirectory(directoryName) {
     stdio: "inherit"
   });
   spinner.succeed(`Removed ${chalk.green(directoryName)} project`);
+}
+
+function handleAndAddVueNativePackageDependencySync(projectName, cmd) {
+  process.chdir(projectName);
+  installVueNativeDependency();
+  installVueNativeDevDependency();
+}
+
+function installVueNativeDependency() {
+  const spinner = ora(
+    `Installing ${chalk.green("Vue Native Dependency")} Packages \n`
+  ).start();
+  const commandObj = getVueNativeDependencyPackageInstallationCommand();
+  const crnaProjectCreationResponse = spawnSync(
+    commandObj.commandName,
+    commandObj.optionsArr
+  );
+  spinner.succeed(
+    `Installed ${chalk.green("Vue Native Dependency")} Packages \n`
+  );
+}
+function installVueNativeDevDependency() {
+  const spinner = ora(
+    `Installing ${chalk.green("Vue Native Dev-dependency")} Packages`
+  ).start();
+  const commandObj = getVueNativeDevDependencyPackageInstallationCommand();
+  const crnaProjectCreationResponse = spawnSync(
+    commandObj.commandName,
+    commandObj.optionsArr
+  );
+  spinner.succeed(
+    `Installed ${chalk.green("Vue Native Dev-Dependency")} Packages`
+  );
+}
+
+function getVueNativeDependencyPackageInstallationCommand() {
+  const isYarnPresent = validationObjects.getYarnVersionIfAvailable();
+  let vueNativePkgInstallationCommand = null;
+  if (isYarnPresent) {
+    vueNativePkgInstallationCommand = {
+      commandName: "yarn",
+      optionsArr: [
+        "add",
+        `${constantObjects.vueNativePackages.vueNativeCore}`,
+        `${constantObjects.vueNativePackages.vueNativeHelper}`,
+        "--exact"
+      ]
+    };
+  } else {
+    vueNativePkgInstallationCommand = {
+      commandName: "npm",
+      optionsArr: [
+        "install",
+        `${constantObjects.vueNativePackages.vueNativeCore}`,
+        `${constantObjects.vueNativePackages.vueNativeHelper}`,
+        "--save"
+      ]
+    };
+  }
+  return vueNativePkgInstallationCommand;
+}
+function getVueNativeDevDependencyPackageInstallationCommand() {
+  const isYarnPresent = validationObjects.getYarnVersionIfAvailable();
+  let vueNativePkgInstallationCommand = null;
+  if (isYarnPresent) {
+    vueNativePkgInstallationCommand = {
+      commandName: "yarn",
+      optionsArr: [
+        "add",
+        `${constantObjects.vueNativePackages.vueNativeScripts}`,
+        "--exact",
+        "--dev"
+      ]
+    };
+  } else {
+    vueNativePkgInstallationCommand = {
+      commandName: "npm",
+      optionsArr: [
+        "install",
+        `${constantObjects.vueNativePackages.vueNativeScripts}`,
+        "--save-dev"
+      ]
+    };
+  }
+  return vueNativePkgInstallationCommand;
 }
 
 function terminateTheProcess(msg) {
