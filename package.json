@@ -1,0 +1,22 @@
+{
+  "name": "max-file-size-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "dude": "index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "columnify": "^1.5.4",
+    "commander": "2.15.1",
+    "filesize": "^3.6.1",
+    "minimist": "^1.2.0",
+    "prompt": "1.0.0"
+  }
+}
