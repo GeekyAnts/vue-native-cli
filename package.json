@@ -2,12 +2,12 @@
   "name": "vue-native-cli",
   "version": "0.0.1-alpha.12",
   "description": "Command-Line Interface for Vue Native App",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "vue-native": "index.js"
+    "vue-native": "./src/index.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/GeekyAnts/vue-native-cli/issues"
   },
-  "files": ["src/**", "index.js"],
+  "files": ["src/**"],
   "homepage": "https://github.com/GeekyAnts/vue-native-cli",
   "dependencies": {
     "chalk": "^2.3.2",

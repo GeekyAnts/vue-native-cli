@@ -11,10 +11,10 @@ var program = require("commander");
 var prompt = require("prompt");
 const semver = require("semver");
 const ora = require("ora");
-const promptModule = require("./src/prompt/index");
-const constantObjects = require("./src/utils/constants");
-const validationObjects = require("./src/utils/validation");
-var projectPackageJson = require("./package.json");
+const promptModule = require("./prompt/index");
+const constantObjects = require("./utils/constants");
+const validationObjects = require("./utils/validation");
+var projectPackageJson = require("../package.json");
 
 const commandLineOptions = minimist(process.argv.slice(2));
 
@@ -189,7 +189,7 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
 function setupVueNativeApp(projectName, cmd) {
   // process.chdir(projectName);
   const rnCliFile = fs.readFileSync(
-    path.resolve(__dirname, "./src/utils/rnCli.config.js")
+    path.resolve(__dirname, "./utils/rnCli.config.js")
   );
   fs.writeFileSync(
     path.join(projectName, constantObjects.rnPkgCliFileName),
@@ -197,7 +197,7 @@ function setupVueNativeApp(projectName, cmd) {
   );
 
   const transformFileContent = fs.readFileSync(
-    path.resolve(__dirname, "./src/utils/vueTransformerPlugin.js")
+    path.resolve(__dirname, "./utils/vueTransformerPlugin.js")
   );
   fs.writeFileSync(
     path.join(projectName, constantObjects.vueTransformerFileName),
@@ -210,15 +210,15 @@ function setupVueNativeApp(projectName, cmd) {
   process.chdir("..");
 
   const appVueFileContent = fs.readFileSync(
-    path.resolve(__dirname, "./src/utils/app.vue")
+    path.resolve(__dirname, "./utils/app.vue")
   );
   fs.writeFileSync(
     path.join(projectName, constantObjects.appVueFileName),
     appVueFileContent
   );
   console.log(
-      chalk.green(`Completed Installing Vue Native ${projectName} App`), 
-    );
+    chalk.green(`Completed Installing Vue Native ${projectName} App`)
+  );
 }
 
 function terminateTheProcess(msg) {
