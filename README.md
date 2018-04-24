@@ -19,8 +19,8 @@ Generate [CRNA + Vue App](https://github.com/GeekyAnts/vue-native-core) App
 $ vue-native init <projectName>
 ```
 
+## [Demo App](https://github.com/GeekyAnts/KitchenSink-Vue-Native)
+
 ## Todo:
 
-* Add React Native Navigation.
-* Add Demo App Link.
 * Improve Debugging, tracing, error reporting.
