@@ -20,23 +20,25 @@ const commandLineOptions = minimist(process.argv.slice(2));
 
 program.version(projectPackageJson.version, "-v, --version");
 
-program.command("init <projectName>").action(function(projectName, cmd) {
-  const isCrnaInstalledPackageVersion = validationObjects.getCrnaVersionIfAvailable();
+program.command("init <projectName>").option('--no-crna', 'Create Normal RN Project').action(function(projectName, cmd) {
+  if (cmd.crna) {
+    const isCrnaInstalledPackageVersion = validationObjects.getCrnaVersionIfAvailable();
+    // check if Create-react-native-app dependency is present or not
+    if (!isCrnaInstalledPackageVersion) {
+      terminateTheProcess(
+        "Please globally install create-react-native-app dependency"
+      );
+      return;
+    } else {
+      console.log(
+        "Installed Crna Version",
+        chalk.green(isCrnaInstalledPackageVersion)
+      );
+    }
+  }
   const isProjectNameValidResponse = validationObjects.isProjectNameValid(
     projectName
   );
-  // check if Create-react-native-app dependency is present or not
-  if (!isCrnaInstalledPackageVersion) {
-    terminateTheProcess(
-      "Please globally install create-react-native-app dependency"
-    );
-    return;
-  } else {
-    console.log(
-      "Installed Crna Version",
-      chalk.green(isCrnaInstalledPackageVersion)
-    );
-  }
   // if project Name is invalid Ask User, Do They Want to Continue
   if (!isProjectNameValidResponse) {
     promptModule.promptForInvalidProjectName(
@@ -47,13 +49,13 @@ program.command("init <projectName>").action(function(projectName, cmd) {
       cmd
     );
   } else {
-    init(projectName, cmd);
+    init(projectName, cmd, cmd.crna);
   }
 });
 
 program.parse(process.argv);
 
-function init(projectName, cmd) {
+function init(projectName, cmd, crna) {
   if (fs.existsSync(projectName)) {
     promptModule.createVueProjectAfterConfirmation(
       prompt,
@@ -63,8 +65,23 @@ function init(projectName, cmd) {
       cmd
     );
   } else {
-    createVueNativeProject(projectName, cmd);
+    if (crna) {
+      createVueNativeProject(projectName, cmd);
+    } else {
+      createNormalNativeApp(projectName, cmd);
+    }
   }
+}
+
+function createNormalNativeApp(projectName, cmd) {
+  var root = path.resolve(projectName);
+  if (fs.existsSync(projectName)) {
+    removeExistingDirectory(projectName);
+  }
+  console.log(chalk.green(`Creating Vue-Native ${projectName} App`));
+  createRNProjectSync(projectName, cmd);
+  handleAndAddVueNativePackageDependencySync(projectName, cmd);
+  setupVueNativeApp(projectName, cmd);
 }
 
 function createVueNativeProject(projectName, cmd) {
@@ -88,6 +105,18 @@ function createCrnaProjectSync(projectName, cmd) {
     { stdio: "inherit" }
   );
   spinner.succeed(`Create Crna ${chalk.green(projectName)} project`);
+}
+
+function createRNProjectSync(projectName, cmd) {
+  const spinner = ora(
+    `Creating react native app ${chalk.green(projectName)} project \n`
+  ).start();
+  const rnProjectCreationResponse = spawnSync(
+    constantObjects.rnPackageName,
+    ['init',projectName],
+    { stdio: "inherit" }
+  );
+  spinner.succeed(`Create react-native ${chalk.green(projectName)} project`);
 }
 
 function removeExistingDirectory(directoryName) {
