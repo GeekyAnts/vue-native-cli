@@ -7,6 +7,7 @@ const chalk = require("chalk");
 var exec = require("child_process").exec;
 const spawnSync = require("child_process").spawnSync;
 var minimist = require("minimist");
+var _ = require("lodash");
 var program = require("commander");
 var prompt = require("prompt");
 const semver = require("semver");
@@ -48,6 +49,9 @@ program.command("init <projectName>").option('--no-crna', 'Create Normal RN Proj
       projectName,
       cmd
     );
+  } else if (!cmd.crna && projectName !== _.camelCase(projectName)){
+    // Check for valid react native app name
+    console.error('\x1b[31m%s\x1b[0m' ,"Invalid project name");
   } else {
     init(projectName, cmd, cmd.crna);
   }
