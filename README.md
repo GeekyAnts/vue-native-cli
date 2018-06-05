@@ -17,6 +17,12 @@ Generate [CRNA + Vue App](https://github.com/GeekyAnts/vue-native-core) App
 
 ```
 $ vue-native init <projectName>
+
+```
+You can also have default React Native Project using command-line options:
+
+```
+vue-native init <projectName> --no-crna
 ```
 
 ## [Demo App](https://github.com/GeekyAnts/KitchenSink-Vue-Native)
