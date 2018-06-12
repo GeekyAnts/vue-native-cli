@@ -1,6 +1,6 @@
 {
   "name": "vue-native-cli",
-  "version": "0.0.1-alpha.15",
+  "version": "0.0.1-alpha.16",
   "description": "Command-Line Interface for Vue Native App",
   "main": "./src/index.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "chalk": "^2.3.2",
     "columnify": "^1.5.4",
     "commander": "2.15.1",
+    "lodash": "^4.17.10",
     "filesize": "^3.6.1",
     "minimist": "^1.2.0",
     "ora": "2.0.0",
