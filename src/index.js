@@ -150,7 +150,8 @@ function installVueNativeDependency() {
   const commandObj = getVueNativeDependencyPackageInstallationCommand();
   const crnaProjectCreationResponse = spawnSync(
     commandObj.commandName,
-    commandObj.optionsArr
+    commandObj.optionsArr,
+    { shell: true }
   );
   spinner.succeed(
     `Installed ${chalk.green("Vue Native Dependency")} Packages \n`
