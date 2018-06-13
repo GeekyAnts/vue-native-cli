@@ -21,41 +21,44 @@ const commandLineOptions = minimist(process.argv.slice(2));
 
 program.version(projectPackageJson.version, "-v, --version");
 
-program.command("init <projectName>").option('--no-crna', 'Create Normal RN Project').action(function(projectName, cmd) {
-  if (cmd.crna) {
-    const isCrnaInstalledPackageVersion = validationObjects.getCrnaVersionIfAvailable();
-    // check if Create-react-native-app dependency is present or not
-    if (!isCrnaInstalledPackageVersion) {
-      terminateTheProcess(
-        "Please globally install create-react-native-app dependency"
-      );
-      return;
-    } else {
-      console.log(
-        "Installed Crna Version",
-        chalk.green(isCrnaInstalledPackageVersion)
-      );
+program
+  .command("init <projectName>")
+  .option("--no-crna", "Create Normal RN Project")
+  .action(function(projectName, cmd) {
+    if (cmd.crna) {
+      const isCrnaInstalledPackageVersion = validationObjects.getCrnaVersionIfAvailable();
+      // check if Create-react-native-app dependency is present or not
+      if (!isCrnaInstalledPackageVersion) {
+        terminateTheProcess(
+          "Please globally install create-react-native-app dependency"
+        );
+        return;
+      } else {
+        console.log(
+          "Installed Crna Version",
+          chalk.green(isCrnaInstalledPackageVersion)
+        );
+      }
     }
-  }
-  const isProjectNameValidResponse = validationObjects.isProjectNameValid(
-    projectName
-  );
-  // if project Name is invalid Ask User, Do They Want to Continue
-  if (!isProjectNameValidResponse) {
-    promptModule.promptForInvalidProjectName(
-      prompt,
-      init,
-      terminateTheProcess,
-      projectName,
-      cmd
+    const isProjectNameValidResponse = validationObjects.isProjectNameValid(
+      projectName
     );
-  } else if (!cmd.crna && projectName !== _.camelCase(projectName)){
-    // Check for valid react native app name
-    console.error('\x1b[31m%s\x1b[0m' ,"Invalid project name");
-  } else {
-    init(projectName, cmd, cmd.crna);
-  }
-});
+    // if project Name is invalid Ask User, Do They Want to Continue
+    if (!isProjectNameValidResponse) {
+      promptModule.promptForInvalidProjectName(
+        prompt,
+        init,
+        terminateTheProcess,
+        projectName,
+        cmd
+      );
+    } else if (!cmd.crna && projectName !== _.camelCase(projectName)) {
+      // Check for valid react native app name
+      console.error("\x1b[31m%s\x1b[0m", "Invalid project name");
+    } else {
+      init(projectName, cmd, cmd.crna);
+    }
+  });
 
 program.parse(process.argv);
 
@@ -106,7 +109,7 @@ function createCrnaProjectSync(projectName, cmd) {
   const crnaProjectCreationResponse = spawnSync(
     constantObjects.crnaPackageName,
     [projectName],
-    { stdio: "inherit" }
+    { stdio: "inherit", shell: true }
   );
   spinner.succeed(`Create Crna ${chalk.green(projectName)} project`);
 }
@@ -117,8 +120,8 @@ function createRNProjectSync(projectName, cmd) {
   ).start();
   const rnProjectCreationResponse = spawnSync(
     constantObjects.rnPackageName,
-    ['init',projectName],
-    { stdio: "inherit" }
+    ["init", projectName],
+    { stdio: "inherit", shell: true }
   );
   spinner.succeed(`Create react-native ${chalk.green(projectName)} project`);
 }
@@ -160,7 +163,8 @@ function installVueNativeDevDependency() {
   const commandObj = getVueNativeDevDependencyPackageInstallationCommand();
   const crnaProjectCreationResponse = spawnSync(
     commandObj.commandName,
-    commandObj.optionsArr
+    commandObj.optionsArr,
+    { shell: true }
   );
   spinner.succeed(
     `Installed ${chalk.green("Vue Native Dev-Dependency")} Packages`
