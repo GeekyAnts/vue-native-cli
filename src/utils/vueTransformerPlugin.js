@@ -1,8 +1,7 @@
+var semver = require('semver');
 var vueNaiveScripts = require("vue-native-scripts");
 var reactNativeVersionString = require("react-native/package.json").version;
 var reactNativeMinorVersion = semver(reactNativeVersionString).minor;
-
-var reactVueTemplateParser = require("./compiler");
 
 if (reactNativeMinorVersion >= 56) {
   upstreamTransformer = require("metro/src/reactNativeTransformer");
