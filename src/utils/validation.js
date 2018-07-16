@@ -3,14 +3,33 @@ const chalk = require("chalk");
 const execSync = require("child_process").execSync;
 const constantObjects = require("./constants");
 
-function isProjectNameValid(projectName) {
+function isProjectNameValidForCrna(projectName) {
   const regExpForValidProjectName = new RegExp(
-    constantObjects.regExpForValidDirectory
+    constantObjects.regExpForValidCrnaDirectory
   );
   if (projectName && regExpForValidProjectName.test(projectName)) {
     return true;
   }
   return false;
+}
+function isProjectNameValidForRn(projectName) {
+  const regExpForValidProjectName = new RegExp(
+    constantObjects.regExpForValidRnDirectory
+  );
+  if (projectName && regExpForValidProjectName.test(projectName)) {
+    return true;
+  }
+  return false;
+}
+
+function isProjectNameValid(projectName, isCrnaProject = true) {
+  let response = false;
+  if (isCrnaProject) {
+    response = isProjectNameValidForCrna(projectName);
+  } else {
+    response = isProjectNameValidForRn(projectName);
+  }
+  return response;
 }
 
 function getYarnVersionIfAvailable() {

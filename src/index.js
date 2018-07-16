@@ -25,7 +25,9 @@ program
   .command("init <projectName>")
   .option("--no-crna", "Create Normal RN Project")
   .action(function(projectName, cmd) {
+    let isCrnaProject = true;
     if (cmd.crna) {
+      isCrnaProject = false;
       const isCrnaInstalledPackageVersion = validationObjects.getCrnaVersionIfAvailable();
       // check if Create-react-native-app dependency is present or not
       if (!isCrnaInstalledPackageVersion) {
@@ -41,7 +43,8 @@ program
       }
     }
     const isProjectNameValidResponse = validationObjects.isProjectNameValid(
-      projectName
+      projectName,
+      isCrnaProject
     );
     // if project Name is invalid Ask User, Do They Want to Continue
     if (!isProjectNameValidResponse) {
@@ -52,9 +55,6 @@ program
         projectName,
         cmd
       );
-    } else if (!cmd.crna && projectName !== _.camelCase(projectName)) {
-      // Check for valid react native app name
-      console.error("\x1b[31m%s\x1b[0m", "Invalid project name");
     } else {
       init(projectName, cmd, cmd.crna);
     }
