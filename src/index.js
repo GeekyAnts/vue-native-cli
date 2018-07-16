@@ -25,9 +25,9 @@ program
   .command("init <projectName>")
   .option("--no-crna", "Create Normal RN Project")
   .action(function(projectName, cmd) {
-    let isCrnaProject = true;
+    let isCrnaProject = false;
     if (cmd.crna) {
-      isCrnaProject = false;
+      isCrnaProject = true;
       const isCrnaInstalledPackageVersion = validationObjects.getCrnaVersionIfAvailable();
       // check if Create-react-native-app dependency is present or not
       if (!isCrnaInstalledPackageVersion) {

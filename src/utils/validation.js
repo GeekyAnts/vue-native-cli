@@ -22,7 +22,7 @@ function isProjectNameValidForRn(projectName) {
   return false;
 }
 
-function isProjectNameValid(projectName, isCrnaProject = true) {
+function isProjectNameValid(projectName, isCrnaProject) {
   let response = false;
   if (isCrnaProject) {
     response = isProjectNameValidForCrna(projectName);
