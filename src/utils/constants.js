@@ -3,6 +3,7 @@ const constantObject = {
   regExpForValidRnDirectory: /^[$A-Z_][0-9A-Z_$]*$/i,
   crnaPackageName: "create-react-native-app",
   rnPackageName: "react-native",
+  stableRNVersion: "0.55.4",
   vueNativePackages: {
     vueNativeCore: "vue-native-core",
     vueNativeHelper: "vue-native-helper",

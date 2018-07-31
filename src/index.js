@@ -24,7 +24,7 @@ program.version(projectPackageJson.version, "-v, --version");
 program
   .command("init <projectName>")
   .option("--no-crna", "Create Normal RN Project")
-  .action(function(projectName, cmd) {
+  .action(function (projectName, cmd) {
     let isCrnaProject = false;
     if (cmd.crna) {
       isCrnaProject = true;
@@ -120,7 +120,7 @@ function createRNProjectSync(projectName, cmd) {
   ).start();
   const rnProjectCreationResponse = spawnSync(
     constantObjects.rnPackageName,
-    ["init", projectName],
+    ["init", projectName, "--version", constantObjects.stableRNVersion],
     { stdio: "inherit", shell: true }
   );
   spinner.succeed(`Create react-native ${chalk.green(projectName)} project`);
