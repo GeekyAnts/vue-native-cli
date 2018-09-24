@@ -4,6 +4,7 @@ const constantObject = {
   crnaPackageName: "create-react-native-app",
   rnPackageName: "react-native",
   stableRNVersion: "0.55.4",
+  appJsonPath: "app.json",
   vueNativePackages: {
     vueNativeCore: "vue-native-core",
     vueNativeHelper: "vue-native-helper",

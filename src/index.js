@@ -99,7 +99,7 @@ function createVueNativeProject(projectName, cmd) {
   console.log(chalk.green(`Creating Vue-Native ${projectName} App`));
   createCrnaProjectSync(projectName, cmd);
   handleAndAddVueNativePackageDependencySync(projectName, cmd);
-  setupVueNativeApp(projectName, cmd);
+  setupVueNativeApp(projectName, cmd, true);
 }
 
 function createCrnaProjectSync(projectName, cmd) {
@@ -224,7 +224,7 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
   return vueNativePkgInstallationCommand;
 }
 
-function setupVueNativeApp(projectName, cmd) {
+function setupVueNativeApp(projectName, cmd, isCrna = false) {
   // process.chdir(projectName);
   const rnCliFile = fs.readFileSync(
     path.resolve(__dirname, "./utils/rnCli.config.js")
@@ -245,6 +245,16 @@ function setupVueNativeApp(projectName, cmd) {
   process.chdir(projectName);
   spawnSync("mv", ["App.js", "App.vue"]);
   spawnSync("rm", ["App.test.js"]);
+  // If created through crna
+  //
+  if (isCrna) {
+    const expoObj = JSON.parse(fs.readFileSync(path.join(constantObjects.appJsonPath), 'utf8'));
+    expoObj.expo.packagerOpts = { config: 'rn-cli.config.js' };
+    fs.writeFileSync(
+      path.join(constantObjects.appJsonPath),
+      JSON.stringify(expoObj, null, 2)
+    );
+  }
   process.chdir("..");
 
   const appVueFileContent = fs.readFileSync(
