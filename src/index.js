@@ -108,7 +108,7 @@ function createCrnaProjectSync(projectName, cmd) {
   ).start();
   const crnaProjectCreationResponse = spawnSync(
     constantObjects.crnaPackageName,
-    [projectName],
+    ['init', '--template=blank', projectName],
     { stdio: "inherit", shell: true }
   );
   spinner.succeed(`Create Crna ${chalk.green(projectName)} project`);
@@ -207,6 +207,7 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
       optionsArr: [
         "add",
         `${constantObjects.vueNativePackages.vueNativeScripts}`,
+        '@babel/core@^7.0.0-0',
         "--exact",
         "--dev"
       ]
@@ -217,6 +218,7 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
       optionsArr: [
         "install",
         `${constantObjects.vueNativePackages.vueNativeScripts}`,
+        '@babel/core@^7.0.0-0',
         "--save-dev"
       ]
     };

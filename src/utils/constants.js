@@ -1,9 +1,9 @@
 const constantObject = {
   regExpForValidCrnaDirectory: /^[a-zA-Z0-9\-]+$/,
   regExpForValidRnDirectory: /^[$A-Z_][0-9A-Z_$]*$/i,
-  crnaPackageName: "create-react-native-app",
+  crnaPackageName: "expo",
   rnPackageName: "react-native",
-  stableRNVersion: "0.55.4",
+  stableRNVersion: "0.58.0",
   appJsonPath: "app.json",
   vueNativePackages: {
     vueNativeCore: "vue-native-core",
