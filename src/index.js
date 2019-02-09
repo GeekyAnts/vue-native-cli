@@ -41,6 +41,13 @@ program
           chalk.green(isCrnaInstalledPackageVersion)
         );
       }
+    } else {
+      if (!validationObjects.getReactNativeCLIifAvailable()) {
+        terminateTheProcess(
+          "Please globally install react-native-cli dependency"
+        );
+        return;
+      }
     }
     const isProjectNameValidResponse = validationObjects.isProjectNameValid(
       projectName,

@@ -71,8 +71,32 @@ function getCrnaVersionIfAvailable() {
   return crnaVersion;
 }
 
+function getReactNativeCLIifAvailable() {
+  var crnaVersion = null;
+  try {
+    // execSync returns a Buffer -> convert to string
+    if (process.platform.startsWith("win")) {
+      crnaVersion = (
+        execSync(`${constantObjects.rnPackageName} --version`).toString() ||
+        ""
+      ).trim();
+    } else {
+      crnaVersion = (
+        execSync(
+          `${constantObjects.rnPackageName} --version 2>/dev/null`
+        ).toString() || ""
+      ).trim();
+    }
+  } catch (error) {
+    console.log(chalk.red("Error In Getting React Native Package Version"));
+    return null;
+  }
+  return crnaVersion;
+}
+
 module.exports = {
   isProjectNameValid,
   getYarnVersionIfAvailable,
-  getCrnaVersionIfAvailable
+  getCrnaVersionIfAvailable,
+  getReactNativeCLIifAvailable
 };
