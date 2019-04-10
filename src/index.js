@@ -69,6 +69,10 @@ program
 
 program.parse(process.argv);
 
+if (!program.args.length) {
+  program.help();
+}
+
 function init(projectName, cmd, crna) {
   if (fs.existsSync(projectName)) {
     promptModule.createVueProjectAfterConfirmation(
