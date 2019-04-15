@@ -19,6 +19,7 @@ For CRNA => npm install create-react-native-app -g
 ## Installation:
 
 ```
+$ npm install -g expo-cli
 $ npm install -g vue-native-cli
 ```
 
