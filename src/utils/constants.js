@@ -11,6 +11,7 @@ const constantObject = {
     vueNativeScripts: "vue-native-scripts"
   },
   rnPkgCliFileName: "rn-cli.config.js",
+  metroConfigFile: "metro.config.js",
   vueTransformerFileName: "vueTransformerPlugin.js",
   appVueFileName: "App.vue"
 };

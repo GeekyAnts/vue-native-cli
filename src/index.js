@@ -248,10 +248,10 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
 function setupVueNativeApp(projectName, cmd, isCrna = false) {
   // process.chdir(projectName);
   const rnCliFile = fs.readFileSync(
-    path.resolve(__dirname, "./utils/rnCli.config.js")
+    path.resolve(__dirname, "./utils/metro.config.js")
   );
   fs.writeFileSync(
-    path.join(projectName, constantObjects.rnPkgCliFileName),
+    path.join(projectName, constantObjects.metroConfigFile),
     rnCliFile
   );
 
