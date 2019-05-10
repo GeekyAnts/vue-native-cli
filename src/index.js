@@ -270,7 +270,7 @@ function setupVueNativeApp(projectName, cmd, isCrna = false) {
   //
   if (isCrna) {
     const expoObj = JSON.parse(fs.readFileSync(path.join(constantObjects.appJsonPath), 'utf8'));
-    expoObj.expo.packagerOpts = { config: 'rn-cli.config.js' };
+    expoObj.expo.packagerOpts = { config: 'metro.config.js' };
     fs.writeFileSync(
       path.join(constantObjects.appJsonPath),
       JSON.stringify(expoObj, null, 2)
