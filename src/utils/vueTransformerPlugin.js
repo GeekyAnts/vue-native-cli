@@ -1,5 +1,5 @@
 var semver = require('semver');
-var vueNaiveScripts = require("vue-native-scripts");
+var vueNativeScripts = require("vue-native-scripts");
 var reactNativeVersionString = require("react-native/package.json").version;
 var reactNativeMinorVersion = semver(reactNativeVersionString).minor;
 
@@ -26,7 +26,7 @@ var vueExtensions = ["vue"]; // <-- Add other extensions if needed.
 
 module.exports.transform = function({ src, filename, options }) {
   if (vueExtensions.some(ext => filename.endsWith("." + ext))) {
-    return vueNaiveScripts.transform({ src, filename, options });
+    return vueNativeScripts.transform({ src, filename, options });
   }
   return upstreamTransformer.transform({ src, filename, options });
 };
