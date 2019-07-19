@@ -83,8 +83,8 @@ if (!program.args.length) {
 
 function init(projectName, cmd, crna) {
   const createProject = crna
-    ? createVueNativeProject
-    : createNormalNativeApp;
+    ? createExpoProject
+    : createReactNativeCLIProject;
 
   if (fs.existsSync(projectName)) {
     promptModule.createVueProjectAfterConfirmation(
@@ -99,7 +99,7 @@ function init(projectName, cmd, crna) {
   }
 }
 
-function createNormalNativeApp(projectName, cmd) {
+function createReactNativeCLIProject(projectName, cmd) {
   var root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
@@ -110,7 +110,7 @@ function createNormalNativeApp(projectName, cmd) {
   setupVueNativeApp(projectName, cmd);
 }
 
-function createVueNativeProject(projectName, cmd) {
+function createExpoProject(projectName, cmd) {
   var root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
