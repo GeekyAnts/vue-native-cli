@@ -82,20 +82,20 @@ if (!program.args.length) {
 }
 
 function init(projectName, cmd, crna) {
+  const createProject = crna
+    ? createVueNativeProject
+    : createNormalNativeApp;
+
   if (fs.existsSync(projectName)) {
     promptModule.createVueProjectAfterConfirmation(
       prompt,
-      createVueNativeProject,
+      createProject,
       terminateTheProcess,
       projectName,
       cmd
     );
   } else {
-    if (crna) {
-      createVueNativeProject(projectName, cmd);
-    } else {
-      createNormalNativeApp(projectName, cmd);
-    }
+    createProject(projectName, cmd);
   }
 }
 
