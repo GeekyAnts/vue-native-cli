@@ -1,23 +1,17 @@
 #!/usr/bin/env node
 
-const util = require("util");
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
-var exec = require("child_process").exec;
 const spawnSync = require("child_process").spawnSync;
-var minimist = require("minimist");
-var _ = require("lodash");
 var program = require("commander");
 var prompt = require("prompt");
-const semver = require("semver");
 const ora = require("ora");
+
 const promptModule = require("./prompt/index");
 const constantObjects = require("./utils/constants");
 const validationObjects = require("./utils/validation");
 var projectPackageJson = require("../package.json");
-
-const commandLineOptions = minimist(process.argv.slice(2));
 
 program.version(projectPackageJson.version, "-v, --version");
 

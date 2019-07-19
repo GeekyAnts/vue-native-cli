@@ -1,4 +1,3 @@
-const semver = require("semver");
 const chalk = require("chalk");
 const execSync = require("child_process").execSync;
 const constantObjects = require("./constants");
