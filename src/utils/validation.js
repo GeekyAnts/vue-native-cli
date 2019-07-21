@@ -11,6 +11,7 @@ function isProjectNameValidForCrna(projectName) {
   }
   return false;
 }
+
 function isProjectNameValidForRn(projectName) {
   const regExpForValidProjectName = new RegExp(
     constantObjects.regExpForValidRnDirectory
@@ -32,7 +33,7 @@ function isProjectNameValid(projectName, isCrnaProject) {
 }
 
 function getYarnVersionIfAvailable() {
-  var yarnVersion;
+  let yarnVersion;
   try {
     // execSync returns a Buffer -> convert to string
     if (process.platform.startsWith("win")) {
@@ -47,8 +48,9 @@ function getYarnVersionIfAvailable() {
   }
   return yarnVersion;
 }
+
 function getCrnaVersionIfAvailable() {
-  var crnaVersion = null;
+  let crnaVersion = null;
   try {
     // execSync returns a Buffer -> convert to string
     if (process.platform.startsWith("win")) {
@@ -71,7 +73,7 @@ function getCrnaVersionIfAvailable() {
 }
 
 function getReactNativeCLIifAvailable() {
-  var crnaVersion = null;
+  let crnaVersion = null;
   try {
     // execSync returns a Buffer -> convert to string
     if (process.platform.startsWith("win")) {

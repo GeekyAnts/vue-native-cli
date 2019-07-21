@@ -8,7 +8,7 @@ function promptForInvalidProjectName(
 ) {
   promptObj.start();
 
-  var property = {
+  const property = {
     name: "invalidProjectName",
     message:
       "Directory " + projectName + " Is InValid. Do You Want To Continue?",
@@ -35,7 +35,7 @@ function createVueProjectAfterConfirmation(
 ) {
   promptObj.start();
 
-  var property = {
+  const property = {
     name: "directoryExistAndContinue",
     message: "Directory " + name + " already exists. Continue?",
     validator: /y[es]*|n[o]?/,

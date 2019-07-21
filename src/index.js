@@ -4,14 +4,14 @@ const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
 const spawnSync = require("child_process").spawnSync;
-var program = require("commander");
-var prompt = require("prompt");
+const program = require("commander");
+const prompt = require("prompt");
 const ora = require("ora");
 
 const promptModule = require("./prompt/index");
 const constantObjects = require("./utils/constants");
 const validationObjects = require("./utils/validation");
-var projectPackageJson = require("../package.json");
+const projectPackageJson = require("../package.json");
 
 program.version(projectPackageJson.version, "-v, --version");
 
@@ -94,7 +94,7 @@ function init(projectName, cmd, crna) {
 }
 
 function createNormalNativeApp(projectName, cmd) {
-  var root = path.resolve(projectName);
+  const root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
   }
@@ -105,7 +105,7 @@ function createNormalNativeApp(projectName, cmd) {
 }
 
 function createVueNativeProject(projectName, cmd) {
-  var root = path.resolve(projectName);
+  const root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
   }
