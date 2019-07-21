@@ -17,11 +17,11 @@ program.version(projectPackageJson.version, "-v, --version");
 
 program
   .command("init <projectName>")
-  // .command("init <projectName>", "create a Vue-Native project")
-  .option("--no-crna", "use react-native-cli instead of expo-cli")
+  // .command("init <projectName>", "create a Vue Native project")
+  .option("--no-expo", "use react-native-cli instead of expo-cli")
   .action(function (projectName, cmd) {
     let isCrnaProject = false;
-    if (cmd.crna) {
+    if (cmd.expo) {
       isCrnaProject = true;
       const isCrnaInstalledPackageVersion = validationObjects.getCrnaVersionIfAvailable();
       // check if Create-react-native-app dependency is present or not
@@ -64,7 +64,7 @@ program
         cmd
       );
     } else {
-      init(projectName, cmd, cmd.crna);
+      init(projectName, cmd, cmd.expo);
     }
   });
 
@@ -82,8 +82,8 @@ if (!program.args.length) {
   program.help();
 }
 
-function init(projectName, cmd, crna) {
-  const createProject = crna
+function init(projectName, cmd, useExpo) {
+  const createProject = useExpo
     ? createExpoProject
     : createReactNativeCLIProject;
 
@@ -105,7 +105,7 @@ function createReactNativeCLIProject(projectName, cmd) {
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
   }
-  console.log(chalk.green(`Creating Vue Native project ${chalk.bold(projectName)}`));
+  console.log(chalk.green(`Creating Vue Native project ${chalk.bold(projectName)}\n`));
   createRNProjectSync(projectName, cmd);
   handleAndAddVueNativePackageDependencySync(projectName, cmd);
   setupVueNativeApp(projectName, cmd);
@@ -194,7 +194,7 @@ function installVueNativeDevDependency() {
     { shell: true, stdio: "inherit" }
   );
   spinner.succeed(
-    chalk.green("Installed Vue-Native devDependencies\n"),
+    chalk.green("Installed Vue Native devDependencies\n"),
   );
 }
 

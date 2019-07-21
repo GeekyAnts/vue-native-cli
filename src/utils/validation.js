@@ -68,7 +68,7 @@ function getCrnaVersionIfAvailable() {
       ).trim();
     }
   } catch (error) {
-    console.log(chalk.red("Error In Getting Crna Package Version"), error);
+    console.log(chalk.red("An error occurred while getting Expo CLI version"), error);
     return null;
   }
   return crnaVersion;
@@ -89,7 +89,7 @@ function getReactNativeCLIifAvailable() {
       : "";
     return packageSemver;
   } catch (error) {
-    console.log(chalk.red("Error In Getting React Native Package Version"));
+    console.log(chalk.red("An error occurred while getting React Native CLI version"));
     return null;
   }
 }
