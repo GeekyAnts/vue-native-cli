@@ -76,24 +76,24 @@ if (!program.args.length) {
 }
 
 function init(projectName, cmd, crna) {
+  const createProject = crna
+    ? createExpoProject
+    : createReactNativeCLIProject;
+
   if (fs.existsSync(projectName)) {
     promptModule.createVueProjectAfterConfirmation(
       prompt,
-      createVueNativeProject,
+      createProject,
       terminateTheProcess,
       projectName,
       cmd
     );
   } else {
-    if (crna) {
-      createVueNativeProject(projectName, cmd);
-    } else {
-      createNormalNativeApp(projectName, cmd);
-    }
+    createProject(projectName, cmd);
   }
 }
 
-function createNormalNativeApp(projectName, cmd) {
+function createReactNativeCLIProject(projectName, cmd) {
   const root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
@@ -104,7 +104,7 @@ function createNormalNativeApp(projectName, cmd) {
   setupVueNativeApp(projectName, cmd);
 }
 
-function createVueNativeProject(projectName, cmd) {
+function createExpoProject(projectName, cmd) {
   const root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
