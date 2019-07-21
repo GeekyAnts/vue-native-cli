@@ -1,5 +1,7 @@
 const chalk = require("chalk");
 const execSync = require("child_process").execSync;
+const semverRegex = require('semver-regex');
+
 const constantObjects = require("./constants");
 
 function isProjectNameValidForCrna(projectName) {
@@ -73,26 +75,23 @@ function getCrnaVersionIfAvailable() {
 }
 
 function getReactNativeCLIifAvailable() {
-  let crnaVersion = null;
-  try {
+  // Get package version command and discard stderr on *nix systems
+  const processCommand = process.platform.startsWith("win")
+    ? `${constantObjects.rnPackageName} --version`
+    : `${constantObjects.rnPackageName} --version 2>/dev/null`
+
+    try {
     // execSync returns a Buffer -> convert to string
-    if (process.platform.startsWith("win")) {
-      crnaVersion = (
-        execSync(`${constantObjects.rnPackageName} --version`).toString() ||
-        ""
-      ).trim();
-    } else {
-      crnaVersion = (
-        execSync(
-          `${constantObjects.rnPackageName} --version 2>/dev/null`
-        ).toString() || ""
-      ).trim();
-    }
+    const commandResult = (execSync(processCommand).toString() || "").trim();
+    const regexMatches = commandResult.match(semverRegex());
+    const packageSemver = regexMatches.length > 0
+      ? regexMatches[0] // longest first match
+      : "";
+    return packageSemver;
   } catch (error) {
     console.log(chalk.red("Error In Getting React Native Package Version"));
     return null;
   }
-  return crnaVersion;
 }
 
 module.exports = {

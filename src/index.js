@@ -36,11 +36,16 @@ program
         );
       }
     } else {
-      if (!validationObjects.getReactNativeCLIifAvailable()) {
+      const reactNativeCLIVersion = validationObjects.getReactNativeCLIifAvailable();
+      if (!reactNativeCLIVersion) {
         terminateTheProcess(
-          "Please globally install react-native-cli dependency"
+          "Please globally install react-native-cli"
         );
         return;
+      } else {
+        console.log(
+          chalk.cyan("Using globally installed react-native-cli " + reactNativeCLIVersion + "\n"),
+        );
       }
     }
     const isProjectNameValidResponse = validationObjects.isProjectNameValid(
