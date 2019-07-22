@@ -107,7 +107,7 @@ function createReactNativeCLIProject(projectName, cmd) {
   }
   console.log(chalk.green(`Creating Vue Native project ${chalk.bold(projectName)}\n`));
   createRNProjectSync(projectName, cmd);
-  handleAndAddVueNativePackageDependencySync(projectName, cmd);
+  installPackages(projectName, cmd);
   setupVueNativeApp(projectName, cmd);
 }
 
@@ -118,7 +118,7 @@ function createExpoProject(projectName, cmd) {
   }
   console.log(chalk.green(`Creating Vue Native project ${chalk.bold(projectName)}\n`));
   createCrnaProjectSync(projectName, cmd);
-  handleAndAddVueNativePackageDependencySync(projectName, cmd);
+  installPackages(projectName, cmd);
   setupVueNativeApp(projectName, cmd, true);
 }
 
@@ -162,7 +162,7 @@ function removeExistingDirectory(directoryName) {
   );
 }
 
-function handleAndAddVueNativePackageDependencySync(projectName, cmd) {
+function installPackages(projectName, cmd) {
   process.chdir(projectName);
   installVueNativeDependency();
   installVueNativeDevDependency();
