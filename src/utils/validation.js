@@ -1,6 +1,7 @@
-const semver = require("semver");
 const chalk = require("chalk");
 const execSync = require("child_process").execSync;
+const semverRegex = require('semver-regex');
+
 const constantObjects = require("./constants");
 
 function isProjectNameValidForCrna(projectName) {
@@ -12,6 +13,7 @@ function isProjectNameValidForCrna(projectName) {
   }
   return false;
 }
+
 function isProjectNameValidForRn(projectName) {
   const regExpForValidProjectName = new RegExp(
     constantObjects.regExpForValidRnDirectory
@@ -33,7 +35,7 @@ function isProjectNameValid(projectName, isCrnaProject) {
 }
 
 function getYarnVersionIfAvailable() {
-  var yarnVersion;
+  let yarnVersion;
   try {
     // execSync returns a Buffer -> convert to string
     if (process.platform.startsWith("win")) {
@@ -48,8 +50,9 @@ function getYarnVersionIfAvailable() {
   }
   return yarnVersion;
 }
+
 function getCrnaVersionIfAvailable() {
-  var crnaVersion = null;
+  let crnaVersion = null;
   try {
     // execSync returns a Buffer -> convert to string
     if (process.platform.startsWith("win")) {
@@ -65,33 +68,30 @@ function getCrnaVersionIfAvailable() {
       ).trim();
     }
   } catch (error) {
-    console.log(chalk.red("Error In Getting Crna Package Version"), error);
+    console.log(chalk.red("An error occurred while getting Expo CLI version"), error);
     return null;
   }
   return crnaVersion;
 }
 
 function getReactNativeCLIifAvailable() {
-  var crnaVersion = null;
-  try {
+  // Get package version command and discard stderr on *nix systems
+  const processCommand = process.platform.startsWith("win")
+    ? `${constantObjects.rnPackageName} --version`
+    : `${constantObjects.rnPackageName} --version 2>/dev/null`
+
+    try {
     // execSync returns a Buffer -> convert to string
-    if (process.platform.startsWith("win")) {
-      crnaVersion = (
-        execSync(`${constantObjects.rnPackageName} --version`).toString() ||
-        ""
-      ).trim();
-    } else {
-      crnaVersion = (
-        execSync(
-          `${constantObjects.rnPackageName} --version 2>/dev/null`
-        ).toString() || ""
-      ).trim();
-    }
+    const commandResult = (execSync(processCommand).toString() || "").trim();
+    const regexMatches = commandResult.match(semverRegex());
+    const packageSemver = regexMatches.length > 0
+      ? regexMatches[0] // longest first match
+      : "";
+    return packageSemver;
   } catch (error) {
-    console.log(chalk.red("Error In Getting React Native Package Version"));
+    console.log(chalk.red("An error occurred while getting React Native CLI version"));
     return null;
   }
-  return crnaVersion;
 }
 
 module.exports = {

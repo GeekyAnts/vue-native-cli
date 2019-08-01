@@ -1,9 +1,9 @@
 <template>
   <view class="container">
     <text class="text-color-primary">My Vue Native App</text>
-    </view>
+  </view>
 </template>
- 
+
 <style>
 .container {
   background-color: white;

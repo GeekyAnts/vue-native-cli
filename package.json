@@ -33,14 +33,10 @@
   ],
   "homepage": "https://github.com/GeekyAnts/vue-native-cli",
   "dependencies": {
-    "chalk": "^2.3.2",
-    "columnify": "^1.5.4",
-    "commander": "2.15.1",
-    "lodash": "^4.17.10",
-    "filesize": "^3.6.1",
-    "minimist": "^1.2.0",
-    "ora": "2.0.0",
-    "prompt": "1.0.0",
-    "semver": "5.5.0"
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "ora": "^3.4.0",
+    "prompt": "^1.0.0",
+    "semver-regex": "^3.1.0"
   }
 }
