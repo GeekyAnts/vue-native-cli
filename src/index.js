@@ -1,58 +1,60 @@
 #!/usr/bin/env node
 
-const util = require("util");
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
-var exec = require("child_process").exec;
 const spawnSync = require("child_process").spawnSync;
-var minimist = require("minimist");
-var _ = require("lodash");
-var program = require("commander");
-var prompt = require("prompt");
-const semver = require("semver");
+const program = require("commander");
+const prompt = require("prompt");
 const ora = require("ora");
+
 const promptModule = require("./prompt/index");
 const constantObjects = require("./utils/constants");
 const validationObjects = require("./utils/validation");
-var projectPackageJson = require("../package.json");
-
-const commandLineOptions = minimist(process.argv.slice(2));
+const projectPackageJson = require("../package.json");
 
 program.version(projectPackageJson.version, "-v, --version");
 
 program
   .command("init <projectName>")
-  .option("--no-crna", "Create Normal RN Project")
+  // .command("init <projectName>", "create a Vue Native project")
+  .option("--no-expo", "use react-native-cli instead of expo-cli")
+  .option("--no-crna", "use react-native-cli instead of expo-cli")
   .action(function (projectName, cmd) {
     let isCrnaProject = false;
-    if (cmd.crna) {
+    if (cmd.expo && cmd.crna) {
       isCrnaProject = true;
       const isCrnaInstalledPackageVersion = validationObjects.getCrnaVersionIfAvailable();
       // check if Create-react-native-app dependency is present or not
       if (!isCrnaInstalledPackageVersion) {
         terminateTheProcess(
-          "Please globally install create-react-native-app dependency"
+          "Please globally install expo-cli"
         );
         return;
       } else {
         console.log(
-          "Installed Crna Version",
-          chalk.green(isCrnaInstalledPackageVersion)
+          chalk.cyan("Using globally installed expo-cli " + isCrnaInstalledPackageVersion + "\n"),
         );
       }
     } else {
-      if (!validationObjects.getReactNativeCLIifAvailable()) {
+      const reactNativeCLIVersion = validationObjects.getReactNativeCLIifAvailable();
+      if (!reactNativeCLIVersion) {
         terminateTheProcess(
-          "Please globally install react-native-cli dependency"
+          "Please globally install react-native-cli"
         );
         return;
+      } else {
+        console.log(
+          chalk.cyan("Using globally installed react-native-cli " + reactNativeCLIVersion + "\n"),
+        );
       }
     }
+
     const isProjectNameValidResponse = validationObjects.isProjectNameValid(
       projectName,
       isCrnaProject
     );
+
     // if project Name is invalid Ask User, Do They Want to Continue
     if (!isProjectNameValidResponse) {
       promptModule.promptForInvalidProjectName(
@@ -63,7 +65,7 @@ program
         cmd
       );
     } else {
-      init(projectName, cmd, cmd.crna);
+      init(projectName, cmd, isCrnaProject);
     }
   });
 
@@ -81,81 +83,87 @@ if (!program.args.length) {
   program.help();
 }
 
-function init(projectName, cmd, crna) {
+function init(projectName, cmd, useExpo) {
+  const createProject = useExpo
+    ? createExpoProject
+    : createReactNativeCLIProject;
+
   if (fs.existsSync(projectName)) {
     promptModule.createVueProjectAfterConfirmation(
       prompt,
-      createVueNativeProject,
+      createProject,
       terminateTheProcess,
       projectName,
       cmd
     );
   } else {
-    if (crna) {
-      createVueNativeProject(projectName, cmd);
-    } else {
-      createNormalNativeApp(projectName, cmd);
-    }
+    createProject(projectName, cmd);
   }
 }
 
-function createNormalNativeApp(projectName, cmd) {
-  var root = path.resolve(projectName);
+function createReactNativeCLIProject(projectName, cmd) {
+  const root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
   }
-  console.log(chalk.green(`Creating Vue-Native ${projectName} App`));
+  console.log(chalk.green(`Creating Vue Native project ${chalk.bold(projectName)}\n`));
   createRNProjectSync(projectName, cmd);
-  handleAndAddVueNativePackageDependencySync(projectName, cmd);
+  installPackages(projectName, cmd);
   setupVueNativeApp(projectName, cmd);
 }
 
-function createVueNativeProject(projectName, cmd) {
-  var root = path.resolve(projectName);
+function createExpoProject(projectName, cmd) {
+  const root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
   }
-  console.log(chalk.green(`Creating Vue-Native ${projectName} App`));
+  console.log(chalk.green(`Creating Vue Native project ${chalk.bold(projectName)}\n`));
   createCrnaProjectSync(projectName, cmd);
-  handleAndAddVueNativePackageDependencySync(projectName, cmd);
+  installPackages(projectName, cmd);
   setupVueNativeApp(projectName, cmd, true);
 }
 
 function createCrnaProjectSync(projectName, cmd) {
   const spinner = ora(
-    `Creating Crna ${chalk.green(projectName)} project \n`
+    chalk.cyan("Creating project with expo-cli\n"),
   ).start();
   const crnaProjectCreationResponse = spawnSync(
     constantObjects.crnaPackageName,
     ['init', '--template=blank', projectName],
     { stdio: "inherit", shell: true }
   );
-  spinner.succeed(`Create Crna ${chalk.green(projectName)} project`);
+  spinner.succeed(
+    chalk.green("Created project with expo-cli\n"),
+  );
 }
 
 function createRNProjectSync(projectName, cmd) {
   const spinner = ora(
-    `Creating react native app ${chalk.green(projectName)} project \n`
+    chalk.cyan("Creating project with react-native-cli\n"),
   ).start();
   const rnProjectCreationResponse = spawnSync(
     constantObjects.rnPackageName,
     ["init", projectName, "--version", constantObjects.stableRNVersion],
     { stdio: "inherit", shell: true }
   );
-  spinner.succeed(`Create react-native ${chalk.green(projectName)} project`);
+  spinner.succeed(
+    chalk.green("Created project with react-native-cli\n"),
+  );
 }
 
 function removeExistingDirectory(directoryName) {
   const spinner = ora(
-    `Removing ${chalk.green(directoryName)} project \n`
+    chalk.yellow(`Removing pre-existing directory with name ${directoryName}\n`),
   ).start();
   const crnaProjectCreationResponse = spawnSync("rm", ["-fr", directoryName], {
     stdio: "inherit"
   });
-  spinner.succeed(`Removed ${chalk.green(directoryName)} project`);
+  spinner.succeed(
+    chalk.yellow(`Removed pre-existing directory with name ${directoryName}\n`),
+  );
 }
 
-function handleAndAddVueNativePackageDependencySync(projectName, cmd) {
+function installPackages(projectName, cmd) {
   process.chdir(projectName);
   installVueNativeDependency();
   installVueNativeDevDependency();
@@ -164,30 +172,30 @@ function handleAndAddVueNativePackageDependencySync(projectName, cmd) {
 
 function installVueNativeDependency() {
   const spinner = ora(
-    `Installing ${chalk.green("Vue Native Dependency")} Packages \n`
+    chalk.cyan("Installing Vue Native dependencies\n"),
   ).start();
   const commandObj = getVueNativeDependencyPackageInstallationCommand();
   const crnaProjectCreationResponse = spawnSync(
     commandObj.commandName,
     commandObj.optionsArr,
-    { shell: true }
+    { shell: true, stdio: "inherit" }
   );
   spinner.succeed(
-    `Installed ${chalk.green("Vue Native Dependency")} Packages \n`
+    chalk.green("Installed Vue Native dependencies\n")
   );
 }
 function installVueNativeDevDependency() {
   const spinner = ora(
-    `Installing ${chalk.green("Vue Native Dev-dependency")} Packages`
+    chalk.cyan("Installing Vue Native devDependencies\n"),
   ).start();
   const commandObj = getVueNativeDevDependencyPackageInstallationCommand();
   const crnaProjectCreationResponse = spawnSync(
     commandObj.commandName,
     commandObj.optionsArr,
-    { shell: true }
+    { shell: true, stdio: "inherit" }
   );
   spinner.succeed(
-    `Installed ${chalk.green("Vue Native Dev-Dependency")} Packages`
+    chalk.green("Installed Vue Native devDependencies\n"),
   );
 }
 
@@ -286,7 +294,7 @@ function setupVueNativeApp(projectName, cmd, isCrna = false) {
     appVueFileContent
   );
   console.log(
-    chalk.green(`Completed Installing Vue Native ${projectName} App`)
+    chalk.green("Setup complete!")
   );
 }
 

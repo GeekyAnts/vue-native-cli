@@ -1,4 +1,5 @@
 const chalk = require("chalk");
+
 function promptForInvalidProjectName(
   promptObj,
   onSuccessAnswer,
@@ -8,12 +9,12 @@ function promptForInvalidProjectName(
 ) {
   promptObj.start();
 
-  var property = {
+  const property = {
     name: "invalidProjectName",
     message:
-      "Directory " + projectName + " Is InValid. Do You Want To Continue?",
+      "Directory " + projectName + " is invalid. Do you want to continue?",
     validator: /y[es]*|n[o]?/,
-    warning: "Must respond yes or no",
+    warning: "Please respond with y(es) or n(o)",
     default: "no"
   };
 
@@ -35,11 +36,11 @@ function createVueProjectAfterConfirmation(
 ) {
   promptObj.start();
 
-  var property = {
+  const property = {
     name: "directoryExistAndContinue",
     message: "Directory " + name + " already exists. Continue?",
     validator: /y[es]*|n[o]?/,
-    warning: "Must respond yes or no",
+    warning: "Please respond with y(es) or n(o)",
     default: "no"
   };
 
