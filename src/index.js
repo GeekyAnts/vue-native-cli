@@ -19,9 +19,10 @@ program
   .command("init <projectName>")
   // .command("init <projectName>", "create a Vue Native project")
   .option("--no-expo", "use react-native-cli instead of expo-cli")
+  .option("--no-crna", "use react-native-cli instead of expo-cli")
   .action(function (projectName, cmd) {
     let isCrnaProject = false;
-    if (cmd.expo) {
+    if (cmd.expo && cmd.crna) {
       isCrnaProject = true;
       const isCrnaInstalledPackageVersion = validationObjects.getCrnaVersionIfAvailable();
       // check if Create-react-native-app dependency is present or not
@@ -64,7 +65,7 @@ program
         cmd
       );
     } else {
-      init(projectName, cmd, cmd.expo);
+      init(projectName, cmd, isCrnaProject);
     }
   });
 
