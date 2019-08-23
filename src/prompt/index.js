@@ -27,7 +27,7 @@ function promptForInvalidProjectName(
   });
 }
 
-function createVueProjectAfterConfirmation(
+async function createVueProjectAfterConfirmation(
   promptObj,
   onSuccessAnswer,
   onFailedAnswer,
@@ -44,11 +44,11 @@ function createVueProjectAfterConfirmation(
     default: "no"
   };
 
-  promptObj.get(property, function(err, result) {
+  promptObj.get(property, async function(err, result) {
     if (result.directoryExistAndContinue[0] === "y") {
-      onSuccessAnswer(name, cmd);
+      await onSuccessAnswer(name, cmd);
     } else {
-      onFailedAnswer();
+      await onFailedAnswer();
     }
   });
 }

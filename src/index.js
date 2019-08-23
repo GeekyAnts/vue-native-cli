@@ -7,6 +7,7 @@ const spawnSync = require("child_process").spawnSync;
 const program = require("commander");
 const prompt = require("prompt");
 const ora = require("ora");
+const union = require("lodash.union")
 
 const promptModule = require("./prompt/index");
 const constantObjects = require("./utils/constants");
@@ -101,7 +102,7 @@ function init(projectName, cmd, useExpo) {
   }
 }
 
-function createReactNativeCLIProject(projectName, cmd) {
+async function createReactNativeCLIProject(projectName, cmd) {
   const root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
@@ -109,10 +110,10 @@ function createReactNativeCLIProject(projectName, cmd) {
   console.log(chalk.green(`Creating Vue Native project ${chalk.bold(projectName)}\n`));
   createRNProjectSync(projectName, cmd);
   installPackages(projectName, cmd);
-  setupVueNativeApp(projectName, cmd);
+  await setupVueNativeApp(projectName, cmd);
 }
 
-function createExpoProject(projectName, cmd) {
+async function createExpoProject(projectName, cmd) {
   const root = path.resolve(projectName);
   if (fs.existsSync(projectName)) {
     removeExistingDirectory(projectName);
@@ -120,7 +121,7 @@ function createExpoProject(projectName, cmd) {
   console.log(chalk.green(`Creating Vue Native project ${chalk.bold(projectName)}\n`));
   createCrnaProjectSync(projectName, cmd);
   installPackages(projectName, cmd);
-  setupVueNativeApp(projectName, cmd, true);
+  await setupVueNativeApp(projectName, cmd, true);
 }
 
 function createCrnaProjectSync(projectName, cmd) {
@@ -161,6 +162,20 @@ function removeExistingDirectory(directoryName) {
   spinner.succeed(
     chalk.yellow(`Removed pre-existing directory with name ${directoryName}\n`),
   );
+}
+
+// Get the `sourceExts` from the default metro configuration
+// Returns an array like ['js', 'json', 'ts', 'tsx']
+async function getSourceFileExtensions() {
+  const { getDefaultConfig } = require(`${process.cwd()}/node_modules/metro-config/src/index.js`);
+  const {
+    resolver: { sourceExts: defaultSourceExts }
+  } = await getDefaultConfig();
+
+  const sourceExts = union(defaultSourceExts, constantObjects.vueFileExtensions);
+  // `sourceExts` now looks like ['js', 'json', 'ts', 'tsx', 'vue']
+
+  return sourceExts;
 }
 
 function installPackages(projectName, cmd) {
@@ -253,7 +268,7 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
   return vueNativePkgInstallationCommand;
 }
 
-function setupVueNativeApp(projectName, cmd, isCrna = false) {
+async function setupVueNativeApp(projectName, cmd, isCrna = false) {
   // process.chdir(projectName);
   const rnCliFile = fs.readFileSync(
     path.resolve(__dirname, "./utils/metro.config.js")
@@ -278,7 +293,18 @@ function setupVueNativeApp(projectName, cmd, isCrna = false) {
   //
   if (isCrna) {
     const expoObj = JSON.parse(fs.readFileSync(path.join(constantObjects.appJsonPath), 'utf8'));
-    expoObj.expo.packagerOpts = { config: 'metro.config.js' };
+
+    const sourceExts = await getSourceFileExtensions();
+
+    // Modify the app.json file to add `sourceExts`
+    // Adding `sourceExts` to metro.config.js stopped working for certain
+    // versions of Expo
+    // This fixes #23
+    expoObj.expo.packagerOpts = {
+      config: 'metro.config.js',
+      sourceExts: sourceExts,
+    };
+
     fs.writeFileSync(
       path.join(constantObjects.appJsonPath),
       JSON.stringify(expoObj, null, 2)

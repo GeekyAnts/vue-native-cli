@@ -13,7 +13,9 @@ const constantObject = {
   rnPkgCliFileName: "rn-cli.config.js",
   metroConfigFile: "metro.config.js",
   vueTransformerFileName: "vueTransformerPlugin.js",
-  appVueFileName: "App.vue"
+  appVueFileName: "App.vue",
+  expoAppJSONSourceExtsPath: "expo.packagerOpts.sourceExts",
+  vueFileExtensions: ["vue"],
 };
 
 module.exports = constantObject;

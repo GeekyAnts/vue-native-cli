@@ -80,7 +80,7 @@ function getReactNativeCLIifAvailable() {
     ? `${constantObjects.rnPackageName} --version`
     : `${constantObjects.rnPackageName} --version 2>/dev/null`
 
-    try {
+  try {
     // execSync returns a Buffer -> convert to string
     const commandResult = (execSync(processCommand).toString() || "").trim();
     const regexMatches = commandResult.match(semverRegex());
