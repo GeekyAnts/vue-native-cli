@@ -164,6 +164,8 @@ function removeExistingDirectory(directoryName) {
   );
 }
 
+// Get the `sourceExts` from the default metro configuration
+// Returns an array like ['js', 'json', 'ts', 'tsx']
 async function getSourceFileExtensions() {
   const { getDefaultConfig } = require(`${process.cwd()}/node_modules/metro-config/src/index.js`);
   const {
@@ -171,6 +173,7 @@ async function getSourceFileExtensions() {
   } = await getDefaultConfig();
 
   const sourceExts = union(defaultSourceExts, constantObjects.vueFileExtensions);
+  // `sourceExts` now looks like ['js', 'json', 'ts', 'tsx', 'vue']
 
   return sourceExts;
 }
@@ -293,6 +296,10 @@ async function setupVueNativeApp(projectName, cmd, isCrna = false) {
 
     const sourceExts = await getSourceFileExtensions();
 
+    // Modify the app.json file to add `sourceExts`
+    // Adding `sourceExts` to metro.config.js stopped working for certain
+    // versions of Expo
+    // This fixes #23
     expoObj.expo.packagerOpts = {
       config: 'metro.config.js',
       sourceExts: sourceExts,
