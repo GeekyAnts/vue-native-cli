@@ -8,6 +8,7 @@ const program = require("commander");
 const prompt = require("prompt");
 const ora = require("ora");
 const union = require("lodash.union")
+const remove = require("rimraf").sync;
 
 const promptModule = require("./prompt/index");
 const constantObjects = require("./utils/constants");
@@ -156,9 +157,7 @@ function removeExistingDirectory(directoryName) {
   const spinner = ora(
     chalk.yellow(`Removing pre-existing directory with name ${directoryName}\n`),
   ).start();
-  const crnaProjectCreationResponse = spawnSync("rm", ["-fr", directoryName], {
-    stdio: "inherit"
-  });
+  remove(directoryName)
   spinner.succeed(
     chalk.yellow(`Removed pre-existing directory with name ${directoryName}\n`),
   );
@@ -288,7 +287,7 @@ async function setupVueNativeApp(projectName, cmd, isCrna = false) {
 
   process.chdir(projectName);
   spawnSync("mv", ["App.js", "App.vue"]);
-  spawnSync("rm", ["App.test.js"]);
+  remove("App.test.js");
   // If created through crna
   //
   if (isCrna) {
