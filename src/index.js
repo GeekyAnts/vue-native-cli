@@ -249,7 +249,7 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
       optionsArr: [
         "add",
         `${constantObjects.vueNativePackages.vueNativeScripts}`,
-        '@babel/core@^7.0.0-0',
+        '@babel/core@^7.0.0',
         "--exact",
         "--dev"
       ]
@@ -260,7 +260,7 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
       optionsArr: [
         "install",
         `${constantObjects.vueNativePackages.vueNativeScripts}`,
-        '@babel/core@^7.0.0-0',
+        '@babel/core@^7.0.0',
         "--save-dev"
       ]
     };
