@@ -286,7 +286,7 @@ async function setupVueNativeApp(projectName, cmd, isCrna = false) {
   );
 
   process.chdir(projectName);
-  spawnSync("mv", ["App.js", "App.vue"]);
+  fs.renameSync("App.js", "App.vue");
   remove("App.test.js");
   // If created through crna
   //
