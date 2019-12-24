@@ -178,8 +178,19 @@ async function getSourceFileExtensions() {
   return sourceExts;
 }
 
+function fixPackages(cmd) {
+  let pkg_file = path.resolve(cwd, 'package.json');
+  let pkg = JSON.parse(fs.readFileSync(pkg_file).toString());
+  pkg.resolutions = pkg.resolutions || {};
+  if (!pkg.resolutions["metro-config"]) {
+    pkg.resolutions["metro-config"] = '>= 0.57';
+  }
+  fs.writeFileSync(pkg_file, JSON.stringify(pkg, null, 2));
+}
+
 function installPackages(projectName, cmd) {
   process.chdir(projectName);
+  fixPackages(process.cwd());
   installVueNativeDependency();
   installVueNativeDevDependency();
   process.chdir("..");
