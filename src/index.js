@@ -8,6 +8,7 @@ const program = require("commander");
 const prompt = require("prompt");
 const ora = require("ora");
 const union = require("lodash.union")
+const remove = require("rimraf").sync;
 
 const promptModule = require("./prompt/index");
 const constantObjects = require("./utils/constants");
@@ -156,9 +157,7 @@ function removeExistingDirectory(directoryName) {
   const spinner = ora(
     chalk.yellow(`Removing pre-existing directory with name ${directoryName}\n`),
   ).start();
-  const crnaProjectCreationResponse = spawnSync("rm", ["-fr", directoryName], {
-    stdio: "inherit"
-  });
+  remove(directoryName)
   spinner.succeed(
     chalk.yellow(`Removed pre-existing directory with name ${directoryName}\n`),
   );
@@ -249,7 +248,7 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
       optionsArr: [
         "add",
         `${constantObjects.vueNativePackages.vueNativeScripts}`,
-        '@babel/core@^7.0.0-0',
+        '@babel/core@^7.0.0',
         "--exact",
         "--dev"
       ]
@@ -260,7 +259,7 @@ function getVueNativeDevDependencyPackageInstallationCommand() {
       optionsArr: [
         "install",
         `${constantObjects.vueNativePackages.vueNativeScripts}`,
-        '@babel/core@^7.0.0-0',
+        '@babel/core@^7.0.0',
         "--save-dev"
       ]
     };
@@ -287,8 +286,8 @@ async function setupVueNativeApp(projectName, cmd, isCrna = false) {
   );
 
   process.chdir(projectName);
-  spawnSync("mv", ["App.js", "App.vue"]);
-  spawnSync("rm", ["App.test.js"]);
+  fs.renameSync("App.js", "App.vue");
+  remove("App.test.js");
   // If created through crna
   //
   if (isCrna) {
