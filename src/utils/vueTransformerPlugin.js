@@ -1,9 +1,9 @@
-var semver = require('semver');
+var SemVer = require('semver');
 var vueNativeScripts = require("vue-native-scripts");
 
 var reactNativeVersionString = require("react-native/package.json").version;
 
-var reactNativeMinorVersion = semver(reactNativeVersionString).minor;
+var reactNativeMinorVersion = new SemVer(reactNativeVersionString).minor;
 
 if (reactNativeMinorVersion >= 59) {
   upstreamTransformer = require("metro-react-native-babel-transformer");
