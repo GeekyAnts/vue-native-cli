@@ -1,4 +1,4 @@
-var SemVer = require('semver');
+var SemVer = require('semver').SemVer;
 var vueNativeScripts = require("vue-native-scripts");
 
 var reactNativeVersionString = require("react-native/package.json").version;
