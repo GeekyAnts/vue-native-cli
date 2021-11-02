@@ -1,3 +1,5 @@
+## ⚠️ This project has been deprecated and is no longer maintained ⚠️
+
 # Vue Native CLI
 
 ## Build Native Mobile apps using Vue
@@ -11,11 +13,13 @@ Vue Native CLI is a basic command line interface that generates a simple 1 page 
 Since Vue Native is a wrapper around React Native, to use the CLI, you must have either `expo-cli` or `react-native-cli` installed globally.
 
 To install Expo globally, use the following command:
+
 ```
 $ npm install -g expo-cli
 ```
 
 If you wish to use React Native CLI instead, use the following command to install it globally:
+
 ```
 $ npm install -g react-native-cli
 ```
