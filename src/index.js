@@ -223,6 +223,7 @@ function getVueNativeDependencyPackageInstallationCommand() {
         "add",
         `${constantObjects.vueNativePackages.vueNativeCore}`,
         `${constantObjects.vueNativePackages.vueNativeHelper}`,
+        `${constantObjects.vueNativePackages.propTypes}`,
         "--exact"
       ]
     };
@@ -233,6 +234,7 @@ function getVueNativeDependencyPackageInstallationCommand() {
         "install",
         `${constantObjects.vueNativePackages.vueNativeCore}`,
         `${constantObjects.vueNativePackages.vueNativeHelper}`,
+        `${constantObjects.vueNativePackages.propTypes}`,
         "--save"
       ]
     };

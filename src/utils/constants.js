@@ -8,7 +8,8 @@ const constantObject = {
   vueNativePackages: {
     vueNativeCore: "vue-native-core",
     vueNativeHelper: "vue-native-helper",
-    vueNativeScripts: "vue-native-scripts"
+    vueNativeScripts: "vue-native-scripts",
+    propTypes: "prop-types"
   },
   rnPkgCliFileName: "rn-cli.config.js",
   metroConfigFile: "metro.config.js",
